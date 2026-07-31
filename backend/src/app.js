@@ -23,6 +23,7 @@ const allowedOrigins = [
     'http://127.0.0.1:8080', 
     'http://localhost:5173', 
     'http://localhost:4200',
+    'https://examgenerator-zeta.vercel.app',
     process.env.FRONTEND_URL // Allow dynamic frontend URL from Railway environment variables
 ].filter(Boolean);
 
