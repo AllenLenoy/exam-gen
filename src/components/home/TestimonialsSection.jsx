@@ -55,18 +55,18 @@ const testimonials = [
 
 export function TestimonialsSection() {
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-violet-50/20 to-white" />
+    <section className="py-24 relative overflow-hidden bg-background">
+      {/* Background divider */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
       <div className="container relative z-10">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <span className="inline-block text-sm font-semibold text-violet-600 tracking-wide uppercase mb-3 animate-fade-in-up">Testimonials</span>
-          <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-5 animate-fade-in-up [animation-delay:100ms]">
+          <span className="inline-block text-sm font-semibold text-secondary tracking-widest uppercase mb-3 animate-fade-in-up">Testimonials</span>
+          <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl mb-5 animate-fade-in-up [animation-delay:100ms]">
             Loved by Educators{' '}
-            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Worldwide</span>
+            <span className="text-primary">Worldwide</span>
           </h2>
-          <p className="text-gray-500 text-lg animate-fade-in-up [animation-delay:200ms]">
+          <p className="text-muted-foreground text-lg animate-fade-in-up [animation-delay:200ms]">
             See what teachers and institutions are saying about ExamGen
           </p>
         </div>
@@ -75,31 +75,31 @@ export function TestimonialsSection() {
           {testimonials.map((testimonial, index) => (
             <Card
               key={testimonial.name}
-              className={`group ${testimonial.bgTint} border-gray-100/80 backdrop-blur-sm hover-lift animate-fade-in-up`}
+              className="group bg-card border-border shadow hover-lift animate-fade-in-up rounded-md"
               style={{ animationDelay: `${300 + index * 100}ms` }}
             >
               <CardContent className="p-7 relative">
                 {/* Decorative quote */}
-                <Quote className={`absolute top-5 right-5 h-8 w-8 opacity-10 bg-gradient-to-br ${testimonial.gradient} text-transparent`} style={{ WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }} />
+                <Quote className="absolute top-5 right-5 h-8 w-8 text-black opacity-20" />
 
                 {/* Stars */}
                 <div className="flex gap-1 mb-5">
                   {Array.from({ length: testimonial.rating }).map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-amber-400 text-amber-400" />
+                    <Star key={i} className="h-4 w-4 fill-secondary text-secondary" />
                   ))}
                 </div>
 
-                <p className="text-gray-600 mb-7 leading-relaxed">"{testimonial.content}"</p>
+                <p className="text-muted-foreground mb-7 leading-relaxed font-display text-lg italic">"{testimonial.content}"</p>
 
                 <div className="flex items-center gap-3">
-                  <Avatar className="h-11 w-11 ring-2 ring-white shadow-sm">
-                    <AvatarFallback className={`bg-gradient-to-br ${testimonial.gradient} text-white font-bold text-sm`}>
+                  <Avatar className="h-11 w-11 ring-1 ring-border shadow-sm">
+                    <AvatarFallback className="bg-primary/5 text-primary font-bold text-sm">
                       {testimonial.name.split(' ').map(n => n[0]).join('')}
                     </AvatarFallback>
                   </Avatar>
                   <div>
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-500">{testimonial.role}</p>
+                    <p className="font-semibold text-foreground">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                   </div>
                 </div>
               </CardContent>

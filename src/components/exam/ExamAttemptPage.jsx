@@ -109,7 +109,7 @@ export function ExamAttemptPage() {
                             <div className="mx-auto mb-4">
                                 <Award className="h-16 w-16 text-primary mx-auto" />
                             </div>
-                            <CardTitle className="text-3xl">Exam Completed!</CardTitle>
+                            <CardTitle className="text-3xl font-display">Exam Completed!</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-6">
                             {/* Score Card */}
@@ -153,10 +153,10 @@ export function ExamAttemptPage() {
     return (
         <div className="min-h-screen bg-background">
             {/* Fixed Header */}
-            <div className="sticky top-0 z-50 bg-card border-b">
+            <div className="sticky top-0 z-50 bg-background/95 backdrop-blur border-b border-border shadow-sm">
                 <div className="max-w-4xl mx-auto px-4 py-4 flex justify-between items-center">
                     <div>
-                        <h1 className="text-xl font-bold">{assignment?.examTemplate?.title}</h1>
+                        <h1 className="text-2xl font-bold font-display tracking-tight text-primary">{assignment?.examTemplate?.title}</h1>
                         <p className="text-sm text-muted-foreground">{assignment?.examTemplate?.subject}</p>
                     </div>
                     <div className="flex items-center gap-4">
@@ -165,9 +165,9 @@ export function ExamAttemptPage() {
                         </Button>
                     </div>
                 </div>
-                <div className="px-4 pb-2">
+                <div className="px-4 pb-3">
                     <div className="max-w-4xl mx-auto">
-                        <Progress value={progress} className="h-2" />
+                        <Progress value={progress} className="h-2 bg-secondary/20" />
                         <p className="text-xs text-muted-foreground mt-1">
                             {answeredCount} of {questions.length} questions answered
                         </p>
@@ -181,7 +181,7 @@ export function ExamAttemptPage() {
                     <Card key={question._id}>
                         <CardHeader>
                             <div className="flex justify-between items-start">
-                                <CardTitle className="text-lg">
+                                <CardTitle className="text-lg font-display">
                                     Question {index + 1}
                                 </CardTitle>
                                 {answers[question._id] !== undefined && (
@@ -210,7 +210,7 @@ export function ExamAttemptPage() {
             </div>
 
             {/* Bottom Submit Button */}
-            <div className="sticky bottom-0 bg-card border-t p-4">
+            <div className="sticky bottom-0 bg-background/95 backdrop-blur border-t border-border p-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)]">
                 <div className="max-w-4xl mx-auto flex justify-end">
                     <Button
                         onClick={handleSubmit}

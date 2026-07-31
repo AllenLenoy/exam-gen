@@ -189,7 +189,7 @@ export default {
 			},
 			fontFamily: {
 				sans: [
-					'Inter',
+					'Hanken Grotesk',
 					'ui-sans-serif',
 					'system-ui',
 					'-apple-system',
@@ -202,14 +202,16 @@ export default {
 					'sans-serif'
 				],
 				display: [
-					'Outfit',
-					'Inter',
-					'ui-sans-serif',
-					'system-ui',
-					'sans-serif'
+					'Source Serif 4',
+					'ui-serif',
+					'Georgia',
+					'Cambria',
+					'Times New Roman',
+					'Times',
+					'serif'
 				],
 				serif: [
-					'Lora',
+					'Source Serif 4',
 					'ui-serif',
 					'Georgia',
 					'Cambria',

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ArrowLeft, Download, Printer, Calendar, Clock, BookOpen } from 'lucide-react';
 import { format } from 'date-fns';
+import html2pdf from 'html2pdf.js';
 
 export function ExamViewPage() {
     const { examId } = useParams();
@@ -82,8 +83,29 @@ export function ExamViewPage() {
     };
 
     const handleDownload = () => {
-        // Future: Implement PDF download
-        alert('PDF download will be implemented soon!');
+        const element = document.getElementById('exam-content');
+        if (!element) return;
+
+        // Temporarily make the answer key visible for the PDF
+        const answerKey = document.getElementById('answer-key');
+        if (answerKey) {
+            answerKey.classList.remove('hidden');
+        }
+
+        const opt = {
+            margin:       10,
+            filename:     `${exam?.title || 'Exam'}.pdf`,
+            image:        { type: 'jpeg', quality: 0.98 },
+            html2canvas:  { scale: 2, useCORS: true },
+            jsPDF:        { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        };
+
+        html2pdf().set(opt).from(element).save().then(() => {
+            // Restore hidden state
+            if (answerKey) {
+                answerKey.classList.add('hidden');
+            }
+        });
     };
 
     if (loading) {
@@ -134,7 +156,8 @@ export function ExamViewPage() {
             </div>
 
             {/* Exam Header */}
-            <Card className="print:shadow-none print:border-none">
+            <div id="exam-content">
+                <Card className="print:shadow-none print:border-none">
                 <CardHeader className="text-center border-b">
                     <CardTitle className="text-3xl">{exam.title}</CardTitle>
                     {exam.description && (
@@ -227,10 +250,10 @@ export function ExamViewPage() {
                         )}
                     </div>
                 </CardContent>
-            </Card>
+                </Card>
 
-            {/* Answer Key Section (Print Only) */}
-            <div className="hidden print:block mt-8 page-break-before">
+                {/* Answer Key Section (Print Only) */}
+                <div id="answer-key" className="hidden print:block mt-8 page-break-before">
                 <Card>
                     <CardHeader>
                         <CardTitle>Answer Key</CardTitle>
@@ -246,6 +269,7 @@ export function ExamViewPage() {
                         </div>
                     </CardContent>
                 </Card>
+            </div>
             </div>
         </div>
     );

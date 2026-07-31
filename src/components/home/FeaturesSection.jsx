@@ -54,42 +54,41 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <section className="py-24 relative overflow-hidden">
-      {/* Soft background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-sky-50/30 to-white" />
+    <section id="features" className="py-24 relative overflow-hidden bg-background">
+      {/* Soft background line */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
       <div className="container relative z-10">
         <div className="mx-auto max-w-2xl text-center mb-16">
-          <span className="inline-block text-sm font-semibold text-sky-600 tracking-wide uppercase mb-3 animate-fade-in-up">Features</span>
-          <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-5 animate-fade-in-up [animation-delay:100ms]">
+          <span className="inline-block text-sm font-semibold text-secondary tracking-widest uppercase mb-3 animate-fade-in-up">Platform Features</span>
+          <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl mb-5 animate-fade-in-up [animation-delay:100ms]">
             Everything You Need for
             <br />
-            <span className="gradient-text">Exam Management</span>
+            <span className="text-primary">Academic Assessment</span>
           </h2>
-          <p className="text-gray-500 text-lg animate-fade-in-up [animation-delay:200ms]">
-            A complete solution for creating, distributing, and analyzing exams.
+          <p className="text-muted-foreground text-lg animate-fade-in-up [animation-delay:200ms]">
+            A complete, rigorous solution for creating, distributing, and analyzing exams at scale.
           </p>
-          <div className="mt-4 mx-auto w-20 h-1 rounded-full bg-gradient-to-r from-sky-500 to-indigo-500 animate-fade-in-up [animation-delay:300ms]" />
         </div>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((feature, index) => (
             <Card
               key={feature.title}
-              className="group relative bg-white/80 backdrop-blur-sm border-gray-100/80 hover-lift cursor-default animate-fade-in-up overflow-hidden"
+              className="group relative bg-card border-border shadow hover-lift cursor-default animate-fade-in-up overflow-hidden rounded-md"
               style={{ animationDelay: `${300 + index * 100}ms` }}
             >
-              {/* Gradient top border on hover */}
-              <div className={`absolute top-0 left-0 right-0 h-1 bg-gradient-to-r ${feature.color} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+              {/* Subtle top border on hover */}
+              <div className="absolute top-0 left-0 right-0 h-1 bg-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
               <CardContent className="p-7">
-                <div className={`mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ${feature.bgLight} ${feature.textColor} transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg`}>
-                  <feature.icon className="h-7 w-7" />
+                <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-md bg-primary/5 text-primary transition-all duration-300 group-hover:bg-primary/10 group-hover:scale-105 border border-primary/10">
+                  <feature.icon className="h-6 w-6 stroke-[1.5]" />
                 </div>
-                <h3 className="mb-2.5 text-lg font-semibold font-display text-gray-900">
+                <h3 className="mb-2.5 text-xl font-semibold font-display text-foreground">
                   {feature.title}
                 </h3>
-                <p className="text-gray-500 leading-relaxed">
+                <p className="text-muted-foreground leading-relaxed text-sm">
                   {feature.description}
                 </p>
               </CardContent>

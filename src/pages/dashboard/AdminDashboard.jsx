@@ -84,7 +84,7 @@ function AdminOverview() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Admin Dashboard</h1>
+        <h1 className="text-3xl font-bold font-display text-foreground">Admin Dashboard</h1>
         <p className="text-muted-foreground mt-1">Manage your institution's exam system</p>
       </div>
 
@@ -315,7 +315,7 @@ function UsersPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-foreground">User Management</h1>
+          <h1 className="text-3xl font-bold font-display text-foreground">User Management</h1>
           <p className="text-muted-foreground mt-1">Manage all users in the system</p>
         </div>
         <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
@@ -554,7 +554,7 @@ function SystemPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">System Overview</h1>
+        <h1 className="text-3xl font-bold font-display text-foreground">System Overview</h1>
         <p className="text-muted-foreground mt-1">View system-wide statistics</p>
       </div>
 
@@ -629,10 +629,10 @@ export default function AdminDashboard() {
   return (
     <div className="min-h-screen bg-background">
       {/* Navigation */}
-      <div className="border-b">
+      <div className="border-b border-border bg-card">
         <div className="container flex items-center justify-between py-4">
           <div className="flex items-center gap-6">
-            <h2 className="text-xl font-bold">ExamGenie Admin</h2>
+            <h2 className="text-xl font-bold font-display tracking-tight text-primary">ExamGenie Admin</h2>
             <nav className="hidden md:flex gap-1">
               {navItems.map((item) => {
                 const Icon = item.icon;

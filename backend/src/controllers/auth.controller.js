@@ -4,6 +4,9 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
 import config from '../config/env.js';
 import { HTTP_STATUS } from '../utils/constants.js';
+import { OAuth2Client } from 'google-auth-library';
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID');
 
 /**
  * Auth Controller - Handles authentication requests
@@ -17,9 +20,28 @@ class AuthController {
             const { name, email, password, role } = req.body;
 
             // Validation
-            if (!name || !email || !password) {
+            if (!name || name.trim().length < 2) {
                 return res.status(HTTP_STATUS.BAD_REQUEST).json({
-                    error: 'Name, email, and password are required'
+                    error: 'Name must be at least 2 characters long'
+                });
+            }
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!email || !emailRegex.test(email)) {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({
+                    error: 'Please provide a valid email address'
+                });
+            }
+
+            if (!password || password.length < 6) {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({
+                    error: 'Password must be at least 6 characters long'
+                });
+            }
+
+            if (role === 'admin') {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({
+                    error: 'Cannot register as an administrator'
                 });
             }
 
@@ -87,6 +109,72 @@ class AuthController {
             });
         } catch (error) {
             next(error);
+        }
+    }
+
+    /**
+     * Google Login
+     */
+    async googleLogin(req, res, next) {
+        try {
+            const { credential, role } = req.body;
+            
+            if (!credential) {
+                return res.status(HTTP_STATUS.BAD_REQUEST).json({
+                    error: 'Google credential is required'
+                });
+            }
+
+            const ticket = await googleClient.verifyIdToken({
+                idToken: credential,
+                audience: process.env.GOOGLE_CLIENT_ID || 'YOUR_GOOGLE_CLIENT_ID'
+            });
+
+            const payload = ticket.getPayload();
+            const { email, name, sub: googleId, picture } = payload;
+
+            let user = await User.findOne({ email });
+
+            if (!user) {
+                const userRole = role && ['teacher', 'student'].includes(role) ? role : 'student';
+                
+                user = await User.create({
+                    name,
+                    email,
+                    googleId,
+                    role: userRole,
+                    avatar: picture
+                });
+            } else if (!user.googleId) {
+                user.googleId = googleId;
+                if (!user.avatar && picture) user.avatar = picture;
+                await user.save();
+            }
+
+            if (!user.isActive) {
+                return res.status(HTTP_STATUS.FORBIDDEN).json({
+                    error: 'Account is deactivated. Contact administrator.'
+                });
+            }
+
+            const token = jwt.sign(
+                { id: user._id, role: user.role },
+                config.jwtSecret,
+                { expiresIn: config.jwtExpire }
+            );
+
+            console.log(`✅ User logged in via Google: ${email} (${user.role})`);
+
+            res.json({
+                message: 'Google login successful',
+                token,
+                user: user.toJSON()
+            });
+        } catch (error) {
+            console.error('Google login error:', error);
+            res.status(HTTP_STATUS.UNAUTHORIZED).json({
+                error: 'Invalid Google credential'
+            });
         }
     }
 

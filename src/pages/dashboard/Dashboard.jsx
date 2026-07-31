@@ -90,13 +90,13 @@ function DashboardOverview() {
       label: 'Total Questions',
       value: stats.totalQuestions,
       icon: BookOpen,
-      color: 'bg-blue-500'
+      color: 'bg-primary/10 text-primary'
     },
     {
       label: 'Exams Created',
       value: stats.totalExams,
       icon: FileText,
-      color: 'bg-green-500'
+      color: 'bg-secondary/10 text-secondary'
     }
   ];
 
@@ -117,7 +117,7 @@ function DashboardOverview() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">
+        <h1 className="text-3xl font-bold font-display text-foreground">
           Welcome back{getFirstName() ? `, ${getFirstName()}` : ''}!
         </h1>
         <p className="text-muted-foreground mt-1">Here's an overview of your exam management</p>
@@ -128,8 +128,8 @@ function DashboardOverview() {
         {statCards.map((stat) => (
           <Card key={stat.label}>
             <CardContent className="flex items-center gap-4 p-6">
-              <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${stat.color} bg-opacity-10`}>
-                <stat.icon className={`h-6 w-6 ${stat.color.replace('bg-', 'text-')}`} />
+              <div className={`flex h-12 w-12 items-center justify-center rounded-lg ${stat.color.split(' ')[0]}`}>
+                <stat.icon className={`h-6 w-6 ${stat.color.split(' ')[1]}`} />
               </div>
               <div>
                 <p className="text-2xl font-bold text-card-foreground">{stat.value}</p>
@@ -304,7 +304,7 @@ function MyExamsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">My Exams</h1>
+        <h1 className="text-3xl font-bold font-display text-foreground">My Exams</h1>
         <p className="text-muted-foreground mt-1">View and manage your finalized exams</p>
       </div>
 
@@ -428,12 +428,12 @@ export default function Dashboard() {
       />
 
       {/* Sidebar */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-card border-r border-border transition-transform lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-        <div className="flex h-16 items-center gap-2 border-b border-border px-6">
-          <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-            <FileText className="h-5 w-5 text-primary-foreground" />
+      <aside className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-primary text-primary-foreground transition-transform lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+        <div className="flex h-16 items-center gap-3 border-b border-primary-foreground/10 px-6">
+          <div className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary text-secondary-foreground shadow-sm">
+            <FileText className="h-5 w-5" />
           </div>
-          <span className="text-lg font-semibold text-foreground">ExamGen</span>
+          <span className="text-xl font-bold font-display tracking-tight">ExamGen</span>
         </div>
 
         <nav className="p-4 space-y-1">
@@ -443,9 +443,9 @@ export default function Dashboard() {
               <Link
                 key={item.path}
                 to={item.path}
-                className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${isActive
-                  ? 'bg-primary text-primary-foreground'
-                  : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${isActive
+                  ? 'bg-secondary text-secondary-foreground shadow-sm'
+                  : 'text-primary-foreground/70 hover:bg-white/10 hover:text-primary-foreground'
                   }`}
               >
                 <item.icon className="h-4 w-4" />
@@ -455,10 +455,10 @@ export default function Dashboard() {
           })}
         </nav>
 
-        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
+        <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-primary-foreground/10">
           <Button
             variant="ghost"
-            className="w-full justify-start text-muted-foreground"
+            className="w-full justify-start text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10"
             onClick={handleLogout}
           >
             <LogOut className="mr-2 h-4 w-4" />
@@ -469,7 +469,7 @@ export default function Dashboard() {
 
       {/* Main content */}
       <div className="flex-1 flex flex-col min-w-0">
-        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-card/95 backdrop-blur px-4 lg:px-6">
+        <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur px-4 lg:px-6">
           <button
             className="lg:hidden p-2 -ml-2"
             onClick={() => setSidebarOpen(true)}

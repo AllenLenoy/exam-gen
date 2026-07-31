@@ -41,29 +41,28 @@ const steps = [
 
 export function HowItWorksSection() {
   return (
-    <section id="how-it-works" className="py-24 relative overflow-hidden">
-      {/* Background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-white via-violet-50/20 to-white" />
-      <div className="absolute inset-0 bg-dot-pattern opacity-30" />
+    <section id="how-it-works" className="py-24 relative overflow-hidden bg-background">
+      {/* Background divider */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
       <div className="container relative z-10">
         <div className="mx-auto max-w-2xl text-center mb-20">
-          <span className="inline-block text-sm font-semibold text-violet-600 tracking-wide uppercase mb-3 animate-fade-in-up">How It Works</span>
-          <h2 className="font-display text-3xl font-bold text-gray-900 sm:text-4xl lg:text-5xl mb-5 animate-fade-in-up [animation-delay:100ms]">
+          <span className="inline-block text-sm font-semibold text-secondary tracking-widest uppercase mb-3 animate-fade-in-up">The Process</span>
+          <h2 className="font-display text-3xl font-semibold text-foreground sm:text-4xl lg:text-5xl mb-5 animate-fade-in-up [animation-delay:100ms]">
             Get Started in{' '}
-            <span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">
+            <span className="text-primary">
               Four Simple Steps
             </span>
           </h2>
-          <p className="text-gray-500 text-lg animate-fade-in-up [animation-delay:200ms]">
-            From question upload to result analysis — effortlessly
+          <p className="text-muted-foreground text-lg animate-fade-in-up [animation-delay:200ms]">
+            From question upload to rigorous result analysis — effortlessly
           </p>
         </div>
 
         <div className="relative max-w-5xl mx-auto">
-          {/* Timeline line — gradient dashed */}
+          {/* Timeline line — thin and subtle */}
           <div className="absolute left-1/2 top-0 hidden h-full w-px -translate-x-1/2 lg:block">
-            <div className="h-full w-full bg-gradient-to-b from-sky-300 via-violet-300 via-amber-300 to-emerald-300 opacity-40" />
+            <div className="h-full w-full bg-border" />
           </div>
 
           <div className="space-y-16 lg:space-y-0">
@@ -77,19 +76,19 @@ export function HowItWorksSection() {
               >
                 {/* Content card */}
                 <div className={`flex-1 ${index % 2 === 0 ? 'lg:text-right' : 'lg:text-left'}`}>
-                  <div className={`inline-block ${index % 2 === 0 ? 'lg:ml-auto' : ''} ${step.bgLight} ${step.borderColor} border rounded-2xl p-6 max-w-md hover-lift`}>
-                    <span className={`text-5xl font-extrabold font-display bg-gradient-to-br ${step.gradient} bg-clip-text text-transparent opacity-30`}>
+                  <div className={`inline-block ${index % 2 === 0 ? 'lg:ml-auto' : ''} bg-card border border-border rounded-md p-8 max-w-md shadow hover-lift transition-all`}>
+                    <span className="text-5xl font-extrabold font-display text-black mb-2 block">
                       {step.step}
                     </span>
-                    <h3 className="text-xl font-bold font-display text-gray-900 mb-2 -mt-2">{step.title}</h3>
-                    <p className="text-gray-500 leading-relaxed">{step.description}</p>
+                    <h3 className="text-xl font-semibold font-display text-foreground mb-3">{step.title}</h3>
+                    <p className="text-muted-foreground leading-relaxed text-sm">{step.description}</p>
                   </div>
                 </div>
 
                 {/* Step circle */}
                 <div className="relative z-10 flex-shrink-0">
-                  <div className={`flex h-18 w-18 items-center justify-center rounded-2xl bg-gradient-to-br ${step.gradient} text-white shadow-xl animate-pulse-glow`}>
-                    <step.icon className="h-8 w-8" />
+                  <div className="flex h-16 w-16 items-center justify-center rounded-full bg-background border-2 border-primary shadow-sm text-primary transition-transform hover:scale-110">
+                    <step.icon className="h-6 w-6 stroke-[1.5]" />
                   </div>
                 </div>
 

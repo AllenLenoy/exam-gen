@@ -14,7 +14,10 @@ router.post('/register', authController.register);
  * POST /api/auth/login
  * Authenticate user and return JWT token
  */
-router.post('/login', authController.login);
+router.post('/login', authController.login.bind(authController));
+
+// Google Login
+router.post('/google', authController.googleLogin.bind(authController));
 
 /**
  * GET /api/auth/me

@@ -154,7 +154,7 @@ export default function StudentDashboard() {
             <div className="space-y-8">
                 {/* Header */}
                 <div>
-                    <h1 className="text-3xl font-bold text-foreground">
+                    <h1 className="text-3xl font-bold font-display text-foreground">
                         Hi, {profileData.name || 'Student'}! 👋
                     </h1>
                     <p className="text-muted-foreground mt-1">
@@ -186,7 +186,7 @@ export default function StudentDashboard() {
                                         </div>
                                         {assignment.examTemplate?.subject && (
                                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                                                <span className="px-2 py-1 rounded bg-blue-100 text-blue-800 text-xs font-semibold">
+                                                <span className="px-2 py-1 rounded bg-secondary/10 text-secondary-foreground font-semibold text-xs border border-secondary/20">
                                                     {assignment.examTemplate.subject}
                                                 </span>
                                             </div>
@@ -228,7 +228,7 @@ export default function StudentDashboard() {
         return (
             <div className="space-y-8">
                 <div>
-                    <h1 className="text-3xl font-bold text-foreground">My Results</h1>
+                    <h1 className="text-3xl font-bold font-display text-foreground">My Results</h1>
                     <p className="text-muted-foreground mt-1">View your exam history and performance</p>
                 </div>
 
@@ -474,13 +474,13 @@ export default function StudentDashboard() {
     return (
         <div className="min-h-screen bg-background flex">
             {/* Sidebar */}
-            <aside className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-card border-r border-border transition-transform lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
-                <div className="flex h-16 items-center gap-2 border-b border-border px-6">
-                    <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary">
-                        <FileText className="h-5 w-5 text-primary-foreground" />
+            <aside className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-primary text-primary-foreground transition-transform lg:relative lg:translate-x-0 ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}`}>
+                <div className="flex h-16 items-center gap-3 border-b border-primary-foreground/10 px-6">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-md bg-secondary text-secondary-foreground shadow-sm">
+                        <FileText className="h-5 w-5" />
                     </div>
-                    <span className="text-lg font-semibold text-foreground">ExamGen</span>
-                    <span className="ml-auto text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">Student</span>
+                    <span className="text-xl font-bold font-display tracking-tight">ExamGen</span>
+                    <span className="ml-auto text-xs font-medium bg-primary-foreground/20 text-primary-foreground px-2 py-0.5 rounded">Student</span>
                 </div>
 
                 <nav className="p-4 space-y-1">
@@ -489,9 +489,9 @@ export default function StudentDashboard() {
                             setCurrentView('dashboard');
                             setSidebarOpen(false);
                         }}
-                        className={`w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${currentView === 'dashboard'
-                            ? 'bg-primary/10 text-primary'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${currentView === 'dashboard'
+                            ? 'bg-secondary text-secondary-foreground shadow-sm'
+                            : 'text-primary-foreground/70 hover:bg-white/10 hover:text-primary-foreground'
                             }`}
                     >
                         <Home className="h-4 w-4" />
@@ -502,9 +502,9 @@ export default function StudentDashboard() {
                             setCurrentView('results');
                             setSidebarOpen(false);
                         }}
-                        className={`w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors ${currentView === 'results' || currentView === 'scorecard'
-                            ? 'bg-primary/10 text-primary'
-                            : 'text-muted-foreground hover:bg-muted hover:text-foreground'
+                        className={`w-full flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors ${currentView === 'results' || currentView === 'scorecard'
+                            ? 'bg-secondary text-secondary-foreground shadow-sm'
+                            : 'text-primary-foreground/70 hover:bg-white/10 hover:text-primary-foreground'
                             }`}
                     >
                         <BarChart className="h-4 w-4" />
@@ -512,8 +512,8 @@ export default function StudentDashboard() {
                     </button>
                 </nav>
 
-                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-border">
-                    <Button variant="ghost" className="w-full justify-start text-muted-foreground" asChild>
+                <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-primary-foreground/10">
+                    <Button variant="ghost" className="w-full justify-start text-primary-foreground/70 hover:text-primary-foreground hover:bg-white/10" asChild>
                         <Link to="/">
                             <LogOut className="mr-2 h-4 w-4" />
                             Log Out
@@ -532,7 +532,7 @@ export default function StudentDashboard() {
 
             {/* Main content */}
             <div className="flex-1 flex flex-col min-w-0">
-                <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-card/95 backdrop-blur px-4 lg:px-6">
+                <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b border-border bg-background/95 backdrop-blur px-4 lg:px-6">
                     <button
                         className="lg:hidden p-2 -ml-2"
                         onClick={() => setSidebarOpen(true)}
@@ -543,8 +543,8 @@ export default function StudentDashboard() {
                     <div className="flex items-center gap-2">
                         <Dialog open={profileOpen} onOpenChange={setProfileOpen}>
                             <DialogTrigger asChild>
-                                <button className="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center hover:bg-blue-200 transition-colors cursor-pointer">
-                                    <span className="text-sm font-medium text-blue-800">
+                                <button className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors cursor-pointer border border-primary/20">
+                                    <span className="text-sm font-medium text-primary">
                                         {profileData.name ? profileData.name.charAt(0).toUpperCase() : 'S'}
                                     </span>
                                 </button>

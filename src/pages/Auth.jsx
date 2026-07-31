@@ -8,6 +8,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { FileText, Mail, Lock, User, ArrowLeft } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import { GoogleLogin } from '@react-oauth/google';
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -87,19 +88,20 @@ export default function Auth() {
     e.preventDefault();
 
     // Input validation
-    if (!signupName?.trim()) {
+    if (!signupName?.trim() || signupName.trim().length < 2) {
       toast({
         title: 'Name required',
-        description: 'Please enter your full name',
+        description: 'Please enter a valid full name (at least 2 characters)',
         variant: 'destructive'
       });
       return;
     }
 
-    if (!signupEmail) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!signupEmail || !emailRegex.test(signupEmail)) {
       toast({
-        title: 'Email required',
-        description: 'Please enter your email address',
+        title: 'Valid email required',
+        description: 'Please enter a valid email address',
         variant: 'destructive'
       });
       return;
@@ -166,27 +168,71 @@ export default function Auth() {
     }
   };
 
+  const handleGoogleSuccess = async (credentialResponse) => {
+    setIsLoading(true);
+    try {
+      const { authAPI } = await import('@/lib/apiService');
+      const response = await authAPI.googleLogin({
+        credential: credentialResponse.credential,
+        role: signupRole // passed from the active tab if they are signing up, otherwise defaults
+      });
+
+      localStorage.setItem('token', response.data.token);
+      localStorage.setItem('user', JSON.stringify(response.data.user));
+
+      toast({
+        title: 'Login successful!',
+        description: `Welcome back, ${response.data.user.name}!`,
+      });
+
+      const { role } = response.data.user;
+      if (role === 'student') {
+        navigate('/dashboard/student');
+      } else if (role === 'admin') {
+        navigate('/dashboard/admin');
+      } else {
+        navigate('/dashboard');
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      toast({
+        title: 'Google Login failed',
+        description: 'Failed to authenticate with Google.',
+        variant: 'destructive'
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/5 via-background to-accent/10 flex flex-col">
-      <div className="container py-4">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors">
+    <div className="min-h-screen bg-background relative flex flex-col overflow-hidden">
+      {/* Background pattern */}
+      <div className="absolute inset-0 opacity-[0.03] pointer-events-none" style={{
+        backgroundImage: 'radial-gradient(circle, #003b1b 1px, transparent 1px)',
+        backgroundSize: '32px 32px'
+      }} />
+
+      <div className="container relative z-10 py-4">
+        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm font-medium">
           <ArrowLeft className="h-4 w-4" />
           Back to home
         </Link>
       </div>
 
-      <div className="flex-1 flex items-center justify-center p-4">
-        <div className="w-full max-w-md animate-fade-in">
-          <div className="flex justify-center mb-8">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary">
-                <FileText className="h-6 w-6 text-primary-foreground" />
+      <div className="flex-1 flex items-center justify-center p-4 relative z-10">
+        <div className="w-full max-w-md animate-fade-in-up">
+          <div className="flex justify-center mb-10">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105">
+                <FileText className="h-6 w-6" />
               </div>
-              <span className="text-2xl font-bold text-foreground">ExamGen</span>
+              <span className="text-3xl font-bold font-display text-foreground tracking-tight">ExamGen</span>
             </Link>
           </div>
 
-          <Card>
+          <Card className="border-border shadow-md bg-card overflow-hidden">
+            <div className="h-1 w-full bg-gradient-to-r from-primary to-secondary" />
             <Tabs defaultValue="login">
               <CardHeader>
                 <TabsList className="grid w-full grid-cols-2">
@@ -290,7 +336,6 @@ export default function Auth() {
                         <SelectContent>
                           <SelectItem value="student">Student</SelectItem>
                           <SelectItem value="teacher">Teacher</SelectItem>
-                          <SelectItem value="admin">Administrator</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
@@ -301,6 +346,36 @@ export default function Auth() {
                 </TabsContent>
               </CardContent>
             </Tabs>
+
+            <div className="px-6 pb-6 pt-2">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t border-border" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-card px-2 text-muted-foreground">
+                    Or continue with
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 flex justify-center">
+                <GoogleLogin
+                  onSuccess={handleGoogleSuccess}
+                  onError={() => {
+                    toast({
+                      title: 'Google Login failed',
+                      description: 'Failed to authenticate with Google.',
+                      variant: 'destructive'
+                    });
+                  }}
+                  useOneTap
+                  theme="outline"
+                  shape="rectangular"
+                  width="100%"
+                />
+              </div>
+            </div>
           </Card>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
