@@ -32,7 +32,7 @@ export function MyStudentsPage() {
     const fetchStudents = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5001/api/teacher/students', {
+            const response = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/teacher/students', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -57,7 +57,7 @@ export function MyStudentsPage() {
         setLoadingResults(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5001/api/teacher/assignments', { // Fetch all assignments to filter
+            const response = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/teacher/assignments', { // Fetch all assignments to filter
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }

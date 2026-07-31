@@ -180,7 +180,7 @@ export function ExamGenerator() {
 
         try {
           // Add timestamp to ensure different requests each time
-          const response = await fetch('http://localhost:5001/api/ai/generate-questions', {
+          const response = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/ai/generate-questions', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({

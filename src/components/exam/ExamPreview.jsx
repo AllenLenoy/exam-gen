@@ -53,7 +53,7 @@ export function ExamPreview({ exam, onBack, onRegenerate, editable = false, onUp
             isActive: true
           };
 
-          const response = await fetch('http://localhost:5001/api/teacher/questions', {
+          const response = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/teacher/questions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -113,7 +113,7 @@ export function ExamPreview({ exam, onBack, onRegenerate, editable = false, onUp
 
       console.log('Creating exam with data:', examData);
 
-      const examResponse = await fetch('http://localhost:5001/api/teacher/exams', {
+      const examResponse = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/teacher/exams', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

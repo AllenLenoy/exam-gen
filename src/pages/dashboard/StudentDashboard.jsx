@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-const API_BASE = "http://localhost:5001/api";
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '';
 const STUDENT_ID = "student_1";
 
 export default function StudentDashboard() {
@@ -63,7 +63,7 @@ export default function StudentDashboard() {
                 const token = localStorage.getItem('token');
 
                 // Fetch student's assigned exams
-                const assignmentsRes = await fetch('http://localhost:5001/api/student/assignments', {
+                const assignmentsRes = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/student/assignments', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -124,7 +124,7 @@ export default function StudentDashboard() {
             setCurrentView('scorecard');
 
             const token = localStorage.getItem('token');
-            const res = await fetch(`http://localhost:5001/api/student/assignments/${assignment._id}/result`, {
+            const res = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/student/assignments/${assignment._id}/result`, {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
 

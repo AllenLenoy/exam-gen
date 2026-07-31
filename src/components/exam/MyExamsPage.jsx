@@ -16,7 +16,7 @@ export function MyExamsPage() {
     const fetchExams = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5001/api/teacher/exams', {
+            const response = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/teacher/exams', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -41,7 +41,7 @@ export function MyExamsPage() {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5001/api/teacher/exams/${examId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/teacher/exams/${examId}`, {
                 method: 'DELETE',
                 headers: {
                     'Authorization': `Bearer ${token}`

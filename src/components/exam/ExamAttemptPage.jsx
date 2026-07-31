@@ -26,7 +26,7 @@ export function ExamAttemptPage() {
     const startExam = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch(`http://localhost:5001/api/student/assignments/${assignmentId}/start`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/student/assignments/${assignmentId}/start`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -67,7 +67,7 @@ export function ExamAttemptPage() {
                 selectedOption: parseInt(selectedOption)
             }));
 
-            const response = await fetch(`http://localhost:5001/api/student/assignments/${assignmentId}/submit`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/student/assignments/${assignmentId}/submit`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

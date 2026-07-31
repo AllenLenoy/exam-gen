@@ -9,7 +9,7 @@ import { CheckCircle2, XCircle, AlertCircle, Home } from "lucide-react";
 // CONFIGURATION
 // TODO: Replace this with a valid ID from the backend (GET /api/templates)
 const TEMPLATE_ID = "template-1";
-const API_BASE = "http://localhost:5001/api";
+const API_BASE = (import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '';
 
 export default function ExamAttempt() {
     const navigate = useNavigate();

@@ -23,7 +23,7 @@ export function ExamViewPage() {
             const token = localStorage.getItem('token');
 
             // Fetch exam details
-            const examResponse = await fetch(`http://localhost:5001/api/teacher/exams/${examId}`, {
+            const examResponse = await fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:5001/api'}/teacher/exams/${examId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -37,7 +37,7 @@ export function ExamViewPage() {
             setExam(examData.exam);
 
             // Fetch all questions for this teacher
-            const questionsResponse = await fetch('http://localhost:5001/api/teacher/questions', {
+            const questionsResponse = await fetch((import.meta.env.VITE_API_URL || 'http://localhost:5001/api') + '/teacher/questions', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
