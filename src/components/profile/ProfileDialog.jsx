@@ -95,7 +95,7 @@ export function ProfileDialog({ open, onOpenChange, currentUser, onProfileUpdate
                 experience: formData.experience
             };
 
-            const response = await fetch('http://localhost:5000/api/auth/profile', {
+            const response = await fetch('http://localhost:5001/api/auth/profile', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

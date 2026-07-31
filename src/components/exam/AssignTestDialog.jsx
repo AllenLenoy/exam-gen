@@ -36,7 +36,7 @@ export function AssignTestDialog({ open, onOpenChange, studentId, studentName, o
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/teacher/exams', {
+            const response = await fetch('http://localhost:5001/api/teacher/exams', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -65,7 +65,7 @@ export function AssignTestDialog({ open, onOpenChange, studentId, studentName, o
         setAssigning(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/teacher/assignments', {
+            const response = await fetch('http://localhost:5001/api/teacher/assignments', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

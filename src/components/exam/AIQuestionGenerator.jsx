@@ -66,7 +66,7 @@ export function AIQuestionGenerator() {
         setLoading(true);
 
         try {
-            const response = await fetch('http://localhost:5000/api/ai/generate-questions', {
+            const response = await fetch('http://localhost:5001/api/ai/generate-questions', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

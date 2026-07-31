@@ -25,7 +25,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/hooks/use-toast";
 
-const API_BASE = "http://localhost:5000/api";
+const API_BASE = "http://localhost:5001/api";
 const STUDENT_ID = "student_1";
 
 export default function StudentDashboard() {
@@ -38,6 +38,8 @@ export default function StudentDashboard() {
     const [profileOpen, setProfileOpen] = useState(false);
     const [currentView, setCurrentView] = useState('dashboard'); // 'dashboard' | 'results' | 'scorecard'
     const [selectedAttempt, setSelectedAttempt] = useState(null);
+    const [detailedResult, setDetailedResult] = useState(null);
+    const [loadingScorecard, setLoadingScorecard] = useState(false);
 
     // Profile data state
     const [profileData, setProfileData] = useState({
@@ -61,7 +63,7 @@ export default function StudentDashboard() {
                 const token = localStorage.getItem('token');
 
                 // Fetch student's assigned exams
-                const assignmentsRes = await fetch('http://localhost:5000/api/student/assignments', {
+                const assignmentsRes = await fetch('http://localhost:5001/api/student/assignments', {
                     headers: {
                         'Authorization': `Bearer ${token}`
                     }
@@ -79,10 +81,18 @@ export default function StudentDashboard() {
             }
         };
 
-        // Load saved profile data from localStorage
+        // Load saved profile data from localStorage or fall back to auth user
         const savedProfile = localStorage.getItem('studentProfile');
+        const authUser = JSON.parse(localStorage.getItem('user') || '{}');
+
         if (savedProfile) {
             setProfileData(JSON.parse(savedProfile));
+        } else if (authUser) {
+            setProfileData(prev => ({
+                ...prev,
+                name: authUser.name || '',
+                email: authUser.email || ''
+            }));
         }
 
         fetchData();
@@ -108,9 +118,32 @@ export default function StudentDashboard() {
         setProfileOpen(false);
     };
 
-    const handleViewScorecard = (attempt) => {
-        setSelectedAttempt(attempt);
-        setCurrentView('scorecard');
+    const handleViewScorecard = async (assignment) => {
+        try {
+            setLoadingScorecard(true);
+            setCurrentView('scorecard');
+
+            const token = localStorage.getItem('token');
+            const res = await fetch(`http://localhost:5001/api/student/assignments/${assignment._id}/result`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+
+            if (!res.ok) throw new Error('Failed to fetch result details');
+
+            const data = await res.json();
+            setDetailedResult(data.result);
+            setSelectedAttempt(assignment);
+        } catch (error) {
+            console.error('Error fetching scorecard:', error);
+            toast({
+                title: "Error",
+                description: "Failed to load exam details. Please try again.",
+                variant: "destructive"
+            });
+            setCurrentView('results'); // Go back on error
+        } finally {
+            setLoadingScorecard(false);
+        }
     };
 
     const renderDashboard = () => {
@@ -260,33 +293,16 @@ export default function StudentDashboard() {
     };
 
     const renderScorecard = () => {
-        if (!selectedAttempt) return null;
+        if (loadingScorecard) {
+            return (
+                <div className="flex flex-col items-center justify-center p-12 space-y-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+                    <p className="text-muted-foreground">Loading exam results...</p>
+                </div>
+            );
+        }
 
-        // Mock detailed result data - in production this would come from API
-        // Creating sample questions to demonstrate the review functionality
-        const mockWrongQuestions = selectedAttempt.score < 5 ? [
-            {
-                id: 'q1',
-                text: 'What is the capital of France?',
-                options: ['London', 'Berlin', 'Paris', 'Madrid'],
-                correctOption: 2,
-                selectedOption: 1
-            },
-            {
-                id: 'q2',
-                text: 'Which planet is known as the Red Planet?',
-                options: ['Venus', 'Mars', 'Jupiter', 'Saturn'],
-                correctOption: 1,
-                selectedOption: 0
-            }
-        ] : [];
-
-        const mockResult = {
-            score: selectedAttempt.score || 0,
-            totalQuestions: 5,
-            percentage: selectedAttempt.score ? `${((selectedAttempt.score / 5) * 100).toFixed(1)}%` : '0%',
-            wrongQuestions: mockWrongQuestions
-        };
+        if (!detailedResult) return null;
 
         return (
             <div className="space-y-6">
@@ -297,6 +313,7 @@ export default function StudentDashboard() {
                         onClick={() => {
                             setCurrentView('results');
                             setSelectedAttempt(null);
+                            setDetailedResult(null);
                         }}
                     >
                         <ArrowLeft className="h-4 w-4 mr-2" />
@@ -309,34 +326,34 @@ export default function StudentDashboard() {
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2 text-green-800">
                             <CheckCircle2 className="h-6 w-6" />
-                            {getTemplateTitleById(selectedAttempt.examTemplateId)}
+                            {detailedResult.examTitle}
                         </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <div className="grid grid-cols-3 gap-4">
                             <div className="text-center">
                                 <div className="text-4xl font-bold text-green-700">
-                                    {mockResult.percentage}
+                                    {detailedResult.percentage}%
                                 </div>
                                 <p className="text-sm text-green-800 mt-1">Percentage</p>
                             </div>
                             <div className="text-center">
                                 <div className="text-4xl font-bold text-green-700">
-                                    {mockResult.score}
+                                    {detailedResult.score}
                                 </div>
                                 <p className="text-sm text-green-800 mt-1">Score</p>
                             </div>
                             <div className="text-center">
                                 <div className="text-4xl font-bold text-green-700">
-                                    {mockResult.totalQuestions}
+                                    {detailedResult.questions.length}
                                 </div>
                                 <p className="text-sm text-green-800 mt-1">Total Questions</p>
                             </div>
                         </div>
-                        {selectedAttempt.submissionTime && (
+                        {detailedResult.completedAt && (
                             <div className="flex items-center justify-center gap-2 text-sm text-green-800 pt-2 border-t border-green-200">
                                 <Calendar className="h-4 w-4" />
-                                <span>Submitted on {new Date(selectedAttempt.submissionTime).toLocaleString()}</span>
+                                <span>Submitted on {new Date(detailedResult.completedAt).toLocaleString()}</span>
                             </div>
                         )}
                     </CardContent>
@@ -354,7 +371,9 @@ export default function StudentDashboard() {
                                     <CheckCircle2 className="h-5 w-5 text-green-600" />
                                     <span className="font-medium">Correct Answers</span>
                                 </div>
-                                <span className="text-lg font-bold text-green-600">{mockResult.score}</span>
+                                <span className="text-lg font-bold text-green-600">
+                                    {detailedResult.questions.filter(q => q.isCorrect).length}
+                                </span>
                             </div>
                             <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
                                 <div className="flex items-center gap-2">
@@ -362,69 +381,62 @@ export default function StudentDashboard() {
                                     <span className="font-medium">Incorrect Answers</span>
                                 </div>
                                 <span className="text-lg font-bold text-red-600">
-                                    {mockResult.totalQuestions - mockResult.score}
+                                    {detailedResult.questions.filter(q => !q.isCorrect).length}
                                 </span>
                             </div>
                         </div>
                     </CardContent>
                 </Card>
 
-                {/* Question Review Section */}
+                {/* Detailed Exam Review */}
                 <Card>
                     <CardHeader>
-                        <CardTitle>Review Incorrect Answers</CardTitle>
+                        <CardTitle>Detailed Exam Review</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {mockResult.wrongQuestions && mockResult.wrongQuestions.length > 0 ? (
-                            <div className="space-y-6">
-                                {mockResult.wrongQuestions.map((q, index) => (
-                                    <div key={q.id} className="pb-6 border-b last:border-b-0 last:pb-0">
-                                        <h3 className="font-medium text-lg mb-4">
-                                            <span className="text-muted-foreground mr-2">Question {index + 1}:</span>
-                                            {q.text}
-                                        </h3>
-                                        <div className="space-y-2">
-                                            {q.options.map((opt, optIndex) => {
-                                                const isCorrect = optIndex === q.correctOption;
-                                                const isSelected = optIndex === q.selectedOption;
+                        <div className="space-y-6">
+                            {detailedResult.questions.map((q, index) => (
+                                <div key={index} className="pb-6 border-b last:border-b-0 last:pb-0">
+                                    <h3 className="font-medium text-lg mb-4">
+                                        <span className="text-muted-foreground mr-2">Question {index + 1}:</span>
+                                        {q.text}
+                                    </h3>
+                                    <div className="space-y-2">
+                                        {q.options.map((opt, optIndex) => {
+                                            const isCorrect = optIndex === q.correctOption;
+                                            const isSelected = optIndex === q.studentAnswer;
 
-                                                return (
-                                                    <div
-                                                        key={optIndex}
-                                                        className={`p-3 rounded-lg border-2 ${isCorrect
-                                                            ? 'bg-green-50 border-green-400 text-green-900'
-                                                            : isSelected
-                                                                ? 'bg-red-50 border-red-400 text-red-900'
-                                                                : 'bg-muted/30 border-border'
-                                                            }`}
-                                                    >
-                                                        <div className="flex items-center justify-between">
-                                                            <span>{opt}</span>
-                                                            {isCorrect && (
-                                                                <span className="text-xs font-semibold bg-green-600 text-white px-2 py-1 rounded">
-                                                                    Correct Answer
-                                                                </span>
-                                                            )}
-                                                            {isSelected && !isCorrect && (
-                                                                <span className="text-xs font-semibold bg-red-600 text-white px-2 py-1 rounded">
-                                                                    Your Answer
-                                                                </span>
-                                                            )}
-                                                        </div>
+                                            let className = "p-3 rounded-lg border-2 ";
+                                            if (isCorrect) {
+                                                className += "bg-green-50 border-green-400 text-green-900";
+                                            } else if (isSelected) {
+                                                className += "bg-red-50 border-red-400 text-red-900";
+                                            } else {
+                                                className += "bg-muted/30 border-border";
+                                            }
+
+                                            return (
+                                                <div key={optIndex} className={className}>
+                                                    <div className="flex items-center justify-between">
+                                                        <span>{opt}</span>
+                                                        {isCorrect && (
+                                                            <span className="text-xs font-semibold bg-green-600 text-white px-2 py-1 rounded">
+                                                                Correct Answer
+                                                            </span>
+                                                        )}
+                                                        {isSelected && !isCorrect && (
+                                                            <span className="text-xs font-semibold bg-red-600 text-white px-2 py-1 rounded">
+                                                                Your Answer
+                                                            </span>
+                                                        )}
                                                     </div>
-                                                );
-                                            })}
-                                        </div>
+                                                </div>
+                                            );
+                                        })}
                                     </div>
-                                ))}
-                            </div>
-                        ) : (
-                            <div className="text-center py-8">
-                                <CheckCircle2 className="mx-auto h-16 w-16 text-green-600 mb-4" />
-                                <h3 className="text-xl font-bold text-green-800 mb-2">Perfect Score!</h3>
-                                <p className="text-muted-foreground">You answered all questions correctly. Excellent work! 🎉</p>
-                            </div>
-                        )}
+                                </div>
+                            ))}
+                        </div>
                     </CardContent>
                 </Card>
             </div>

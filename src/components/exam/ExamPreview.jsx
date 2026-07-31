@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { ArrowLeft, RefreshCw, Printer, Download, Edit2, Save, X, CheckCircle } from 'lucide-react';
+import { ArrowLeft, RefreshCw, Printer, Edit2, Save, X, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
@@ -19,38 +19,7 @@ export function ExamPreview({ exam, onBack, onRegenerate, editable = false, onUp
     window.print();
   };
 
-  const handleDownload = async () => {
-    try {
-      // Call backend to generate PDF
-      const response = await fetch('http://localhost:5000/api/exams/generate-pdf', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(exam)
-      });
 
-      if (!response.ok) {
-        throw new Error('Failed to generate PDF');
-      }
-
-      // Get PDF blob
-      const blob = await response.blob();
-
-      // Create download link
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${exam.title.replace(/\s+/g, '_')}.pdf`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    } catch (error) {
-      console.error('Error downloading PDF:', error);
-      alert('Failed to download PDF. Please try again.');
-    }
-  };
 
   const handleFinalize = async () => {
     setIsFinalizing(true);
@@ -84,7 +53,7 @@ export function ExamPreview({ exam, onBack, onRegenerate, editable = false, onUp
             isActive: true
           };
 
-          const response = await fetch('http://localhost:5000/api/teacher/questions', {
+          const response = await fetch('http://localhost:5001/api/teacher/questions', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -144,7 +113,7 @@ export function ExamPreview({ exam, onBack, onRegenerate, editable = false, onUp
 
       console.log('Creating exam with data:', examData);
 
-      const examResponse = await fetch('http://localhost:5000/api/teacher/exams', {
+      const examResponse = await fetch('http://localhost:5001/api/teacher/exams', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -258,10 +227,7 @@ export function ExamPreview({ exam, onBack, onRegenerate, editable = false, onUp
                 Regenerate
               </Button>
             )}
-            <Button variant="outline" onClick={handleDownload}>
-              <Download className="mr-2 h-4 w-4" />
-              Download
-            </Button>
+
             <Button variant="outline" onClick={handlePrint}>
               <Printer className="mr-2 h-4 w-4" />
               Print

@@ -6,6 +6,14 @@ import { Input } from '@/components/ui/input';
 import { User, Search, ClipboardList, Mail, Calendar } from 'lucide-react';
 import { format } from 'date-fns';
 import { AssignTestDialog } from '@/components/exam/AssignTestDialog';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+} from "@/components/ui/dialog";
+import { Badge } from "@/components/ui/badge";
 
 export function MyStudentsPage() {
     const [students, setStudents] = useState([]);
@@ -13,6 +21,9 @@ export function MyStudentsPage() {
     const [searchQuery, setSearchQuery] = useState('');
     const [assignDialogOpen, setAssignDialogOpen] = useState(false);
     const [selectedStudent, setSelectedStudent] = useState(null);
+    const [resultDialogOpen, setResultDialogOpen] = useState(false);
+    const [studentResults, setStudentResults] = useState([]);
+    const [loadingResults, setLoadingResults] = useState(false);
 
     useEffect(() => {
         fetchStudents();
@@ -21,7 +32,7 @@ export function MyStudentsPage() {
     const fetchStudents = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/teacher/students', {
+            const response = await fetch('http://localhost:5001/api/teacher/students', {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -37,6 +48,34 @@ export function MyStudentsPage() {
             console.error('Error fetching students:', error);
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleViewResults = async (student) => {
+        setSelectedStudent(student);
+        setResultDialogOpen(true);
+        setLoadingResults(true);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:5001/api/teacher/assignments', { // Fetch all assignments to filter
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) throw new Error('Failed to fetch assignments');
+
+            const data = await response.json();
+            // Filter assignments for this student
+            const studentAssignments = (data.assignments || []).filter(
+                a => a.student._id === student._id || a.student === student._id
+            );
+
+            setStudentResults(studentAssignments);
+        } catch (error) {
+            console.error('Error fetching results:', error);
+        } finally {
+            setLoadingResults(false);
         }
     };
 
@@ -199,8 +238,12 @@ export function MyStudentsPage() {
                                             <ClipboardList className="h-3 w-3 mr-1" />
                                             Assign Test
                                         </Button>
-                                        <Button variant="ghost" size="sm">
-                                            View Profile
+                                        <Button
+                                            variant="ghost"
+                                            size="sm"
+                                            onClick={() => handleViewResults(student)}
+                                        >
+                                            View Results
                                         </Button>
                                     </div>
                                 </div>
@@ -209,6 +252,73 @@ export function MyStudentsPage() {
                     )}
                 </CardContent>
             </Card>
+
+            {/* Student Results Dialog */}
+            <Dialog open={resultDialogOpen} onOpenChange={setResultDialogOpen}>
+                <DialogContent className="max-w-3xl max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>Student Results: {selectedStudent?.name}</DialogTitle>
+                        <DialogDescription>
+                            Exam history and performance overview.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="mt-4">
+                        {loadingResults ? (
+                            <div className="flex justify-center p-8">
+                                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+                            </div>
+                        ) : studentResults.length === 0 ? (
+                            <div className="text-center p-8 text-muted-foreground">
+                                <ClipboardList className="mx-auto h-12 w-12 mb-3 opacity-20" />
+                                <p>No assignments or exam results found for this student.</p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                {studentResults.map((result) => (
+                                    <div key={result._id} className="flex items-center justify-between p-4 border rounded-lg bg-card hover:bg-accent/50 transition-colors">
+                                        <div className="flex items-center gap-4">
+                                            <div className={`h-10 w-10 rounded-full flex items-center justify-center ${result.status === 'completed' ? 'bg-green-100 text-green-700' :
+                                                    result.status === 'in-progress' ? 'bg-blue-100 text-blue-700' :
+                                                        'bg-yellow-100 text-yellow-700'
+                                                }`}>
+                                                {result.status === 'completed' ? <ClipboardList className="h-5 w-5" /> : <Clock className="h-5 w-5" />}
+                                            </div>
+                                            <div>
+                                                <h4 className="font-semibold">{result.examTemplate?.title || 'Unknown Exam'}</h4>
+                                                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                                                    <span>{result.examTemplate?.subject}</span>
+                                                    <span>•</span>
+                                                    <span>{format(new Date(result.createdAt), 'MMM d, yyyy')}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="text-right">
+                                            <div className="mb-1">
+                                                <Badge variant={
+                                                    result.status === 'completed' ? 'default' :
+                                                        result.status === 'in-progress' ? 'secondary' : 'outline'
+                                                }>
+                                                    {result.status === 'completed' ? 'Completed' :
+                                                        result.status === 'in-progress' ? 'In Progress' : 'Pending'}
+                                                </Badge>
+                                            </div>
+                                            {result.status === 'completed' && (
+                                                <div className="text-sm font-medium">
+                                                    Score: <span className={result.score >= (result.totalMarks * 0.4) ? "text-green-600" : "text-red-600"}>
+                                                        {result.score}/{result.totalMarks}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </DialogContent>
+            </Dialog>
 
             {/* Assign Test Dialog */}
             {selectedStudent && (

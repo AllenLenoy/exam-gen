@@ -50,20 +50,20 @@ function DashboardOverview() {
       };
 
       // Fetch current user
-      const userResponse = await fetch('http://localhost:5000/api/auth/me', { headers });
+      const userResponse = await fetch('http://localhost:5001/api/auth/me', { headers });
       const userData = await userResponse.json();
       setCurrentUser(userData.user);
 
       // Fetch questions
-      const questionsResponse = await fetch('http://localhost:5000/api/teacher/questions', { headers });
+      const questionsResponse = await fetch('http://localhost:5001/api/teacher/questions', { headers });
       const questionsData = await questionsResponse.json();
 
       // Fetch exams
-      const examsResponse = await fetch('http://localhost:5000/api/teacher/exams', { headers });
+      const examsResponse = await fetch('http://localhost:5001/api/teacher/exams', { headers });
       const examsData = await examsResponse.json();
 
       // Fetch students
-      const studentsResponse = await fetch('http://localhost:5000/api/teacher/students', { headers });
+      const studentsResponse = await fetch('http://localhost:5001/api/teacher/students', { headers });
       const studentsData = await studentsResponse.json();
 
       setStats({
@@ -252,7 +252,7 @@ function MyExamsPage() {
   const fetchExams = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/teacher/exams', {
+      const response = await fetch('http://localhost:5001/api/teacher/exams', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -276,7 +276,7 @@ function MyExamsPage() {
 
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/teacher/exams/${examId}`, {
+      const response = await fetch(`http://localhost:5001/api/teacher/exams/${examId}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -397,7 +397,7 @@ export default function Dashboard() {
   const fetchUserData = async () => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch('http://localhost:5000/api/auth/me', {
+      const response = await fetch('http://localhost:5001/api/auth/me', {
         headers: { 'Authorization': `Bearer ${token}` }
       });
       const data = await response.json();
