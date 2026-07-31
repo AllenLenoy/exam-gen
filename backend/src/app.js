@@ -17,9 +17,26 @@ connectDB();
 
 const app = express();
 
+// Define allowed origins
+const allowedOrigins = [
+    'http://localhost:8080', 
+    'http://127.0.0.1:8080', 
+    'http://localhost:5173', 
+    'http://localhost:4200',
+    process.env.FRONTEND_URL // Allow dynamic frontend URL from Railway environment variables
+].filter(Boolean);
+
 // Middleware
 app.use(cors({
-    origin: ['http://localhost:8080', 'http://127.0.0.1:8080', 'http://localhost:5173', 'http://localhost:4200'],
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        // Or if the origin is in our allowed list
+        if (!origin || allowedOrigins.includes(origin) || allowedOrigins.some(url => origin.startsWith(url))) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
