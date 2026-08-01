@@ -1,8 +1,68 @@
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles, Play, CheckCircle2 } from 'lucide-react';
+import { ArrowRight, Sparkles, Play, CheckCircle2, Loader2 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
+const MOCK_DATA = {
+  'Advanced Biology': [
+    {
+      q: "Which organelle is primarily responsible for cellular respiration?",
+      options: ["Nucleus", "Mitochondria", "Ribosome", "Golgi Apparatus"]
+    },
+    {
+      q: "What is the primary function of DNA polymerase?",
+      options: ["Synthesize RNA", "Synthesize DNA", "Degrade proteins", "Form peptide bonds"]
+    }
+  ],
+  'World History': [
+    {
+      q: "In what year did the French Revolution begin?",
+      options: ["1776", "1789", "1812", "1848"]
+    },
+    {
+      q: "Which empire was ruled by Suleiman the Magnificent?",
+      options: ["Ottoman Empire", "Roman Empire", "Mongol Empire", "Byzantine Empire"]
+    }
+  ],
+  'Calculus II': [
+    {
+      q: "Evaluate the integral of e^x dx.",
+      options: ["e^x + C", "xe^x + C", "ln(x) + C", "1/x + C"]
+    },
+    {
+      q: "Which test is best for the series Σ (1/n^2)?",
+      options: ["Ratio Test", "Root Test", "p-series Test", "Divergence Test"]
+    }
+  ],
+  'Organic Chemistry': [
+    {
+      q: "What is the hybridization of carbon in methane?",
+      options: ["sp", "sp2", "sp3", "sp3d"]
+    },
+    {
+      q: "Which functional group is present in alcohols?",
+      options: ["-COOH", "-OH", "-NH2", "-CHO"]
+    }
+  ]
+};
+
 export function HeroSection() {
+  const [subject, setSubject] = useState('Advanced Biology');
+  const [isDrafting, setIsDrafting] = useState(false);
+  const [previewItems, setPreviewItems] = useState([]);
+
+  const handleGenerate = () => {
+    if (isDrafting) return;
+    setIsDrafting(true);
+    setPreviewItems([]);
+    
+    // Simulate AI generation delay
+    setTimeout(() => {
+      setPreviewItems(MOCK_DATA[subject] || MOCK_DATA['Advanced Biology']);
+      setIsDrafting(false);
+    }, 1800);
+  };
+
   return (
     <section className="relative overflow-hidden bg-background pt-24 md:pt-32 pb-24">
       <div className="container mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
@@ -42,7 +102,7 @@ export function HeroSection() {
                 <img src="https://ui-avatars.com/api/?name=MR&background=14532d&color=fff&size=32" alt="Educator" />
               </div>
             </div>
-            <span>Trusted by <span className="text-black">10,000+</span> Educators</span>
+            <span>Trusted by <span className="text-black dark:text-white">10,000+</span> Educators</span>
           </div>
         </div>
 
@@ -66,7 +126,11 @@ export function HeroSection() {
               <div className="space-y-6">
                 <div>
                   <label className="block text-sm font-semibold text-muted-foreground mb-2">Subject Area</label>
-                  <select className="w-full bg-muted/50 border border-border rounded-md px-4 py-2.5 text-foreground focus:border-primary focus:ring-1 focus:ring-primary appearance-none outline-none transition-colors">
+                  <select 
+                    value={subject}
+                    onChange={(e) => setSubject(e.target.value)}
+                    className="w-full bg-muted/50 border border-border rounded-md px-4 py-2.5 text-foreground focus:border-primary focus:ring-1 focus:ring-primary appearance-none outline-none transition-colors"
+                  >
                     <option>Advanced Biology</option>
                     <option>World History</option>
                     <option>Calculus II</option>
@@ -92,45 +156,82 @@ export function HeroSection() {
                     </select>
                   </div>
                 </div>
-                <button className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-md flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors mt-4">
-                  <Sparkles className="h-4 w-4" />
-                  Generate Draft
+                <button 
+                  onClick={handleGenerate}
+                  disabled={isDrafting}
+                  className="w-full bg-primary text-primary-foreground font-semibold py-3 rounded-md flex items-center justify-center gap-2 hover:bg-primary/90 transition-colors mt-4 disabled:opacity-80 disabled:cursor-not-allowed"
+                >
+                  {isDrafting ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="h-4 w-4" />
+                  )}
+                  {isDrafting ? 'Generating...' : 'Generate Draft'}
                 </button>
               </div>
 
               {/* Preview Area */}
-              <div className="bg-muted/30 rounded-lg border border-border p-4 flex flex-col h-full">
+              <div className="bg-muted/30 rounded-lg border border-border p-4 flex flex-col h-full overflow-hidden">
                 <div className="flex justify-between items-center mb-4">
                   <span className="text-sm font-semibold text-muted-foreground">Live Preview</span>
-                  <span className="text-xs font-semibold bg-muted px-2 py-1 rounded text-muted-foreground">Drafting...</span>
+                  {isDrafting && (
+                    <span className="text-xs font-semibold bg-primary/10 text-primary px-2 py-1 rounded animate-pulse">
+                      Drafting...
+                    </span>
+                  )}
                 </div>
-                <div className="space-y-4 flex-grow">
-                  {/* Skeleton Question 1 */}
-                  <div className="animate-pulse">
-                    <div className="flex gap-2 mb-2">
-                      <div className="w-6 h-6 rounded bg-border flex-shrink-0"></div>
-                      <div className="h-4 bg-border rounded w-full mt-1"></div>
+                
+                <div className="space-y-4 flex-grow overflow-y-auto pr-1 custom-scrollbar">
+                  {previewItems.length > 0 && !isDrafting ? (
+                    <div className="space-y-4 animate-fade-in">
+                      {previewItems.map((item, idx) => (
+                        <div key={idx} className="space-y-2">
+                          <p className="text-sm font-medium text-foreground leading-snug">
+                            {idx + 1}. {item.q}
+                          </p>
+                          <div className="pl-4 space-y-1">
+                            {item.options.map((opt, i) => (
+                              <div key={i} className="flex items-center gap-2">
+                                <div className="w-4 h-4 rounded-full border border-border flex items-center justify-center text-[8px] text-muted-foreground">
+                                  {String.fromCharCode(65 + i)}
+                                </div>
+                                <span className="text-xs text-muted-foreground">{opt}</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="h-4 bg-border rounded w-5/6 ml-8 mb-3"></div>
-                    <div className="ml-8 space-y-2">
-                      <div className="h-3 bg-border rounded w-2/3"></div>
-                      <div className="h-3 bg-border rounded w-3/4"></div>
-                      <div className="h-3 bg-muted border border-border rounded w-1/2"></div>
-                    </div>
-                  </div>
-                  <hr className="border-border" />
-                  {/* Skeleton Question 2 */}
-                  <div className="animate-pulse opacity-50">
-                    <div className="flex gap-2 mb-2">
-                      <div className="w-6 h-6 rounded bg-border flex-shrink-0"></div>
-                      <div className="h-4 bg-border rounded w-full mt-1"></div>
-                    </div>
-                    <div className="h-4 bg-border rounded w-4/6 ml-8 mb-3"></div>
-                    <div className="ml-8 space-y-2">
-                      <div className="h-3 bg-border rounded w-1/2"></div>
-                      <div className="h-3 bg-border rounded w-2/3"></div>
-                    </div>
-                  </div>
+                  ) : (
+                    <>
+                      {/* Skeleton Question 1 */}
+                      <div className={`transition-opacity duration-300 ${isDrafting ? 'animate-pulse opacity-100' : 'opacity-40'}`}>
+                        <div className="flex gap-2 mb-2">
+                          <div className="w-6 h-6 rounded bg-border flex-shrink-0"></div>
+                          <div className="h-4 bg-border rounded w-full mt-1"></div>
+                        </div>
+                        <div className="h-4 bg-border rounded w-5/6 ml-8 mb-3"></div>
+                        <div className="ml-8 space-y-2">
+                          <div className="h-3 bg-border rounded w-2/3"></div>
+                          <div className="h-3 bg-border rounded w-3/4"></div>
+                          <div className="h-3 bg-muted border border-border rounded w-1/2"></div>
+                        </div>
+                      </div>
+                      <hr className="border-border my-4" />
+                      {/* Skeleton Question 2 */}
+                      <div className={`transition-opacity duration-300 ${isDrafting ? 'animate-pulse opacity-70' : 'opacity-20'}`}>
+                        <div className="flex gap-2 mb-2">
+                          <div className="w-6 h-6 rounded bg-border flex-shrink-0"></div>
+                          <div className="h-4 bg-border rounded w-full mt-1"></div>
+                        </div>
+                        <div className="h-4 bg-border rounded w-4/6 ml-8 mb-3"></div>
+                        <div className="ml-8 space-y-2">
+                          <div className="h-3 bg-border rounded w-1/2"></div>
+                          <div className="h-3 bg-border rounded w-2/3"></div>
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
             </div>
