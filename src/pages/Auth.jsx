@@ -359,21 +359,35 @@ export default function Auth() {
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-center">
-                <GoogleLogin
-                  onSuccess={handleGoogleSuccess}
-                  onError={() => {
-                    toast({
-                      title: 'Google Login failed',
-                      description: 'Failed to authenticate with Google.',
-                      variant: 'destructive'
-                    });
-                  }}
-                  useOneTap
-                  theme="outline"
-                  shape="rectangular"
-                  width="100%"
-                />
+              <div className="mt-4 flex flex-col items-center gap-4">
+                <div className="flex flex-col items-center gap-2 text-sm w-full">
+                  <Label className="text-muted-foreground">Select role before continuing with Google (for new users):</Label>
+                  <Select value={signupRole} onValueChange={(v) => setSignupRole(v)}>
+                    <SelectTrigger className="w-full max-w-[200px] h-9">
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="student">Student</SelectItem>
+                      <SelectItem value="teacher">Teacher</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="w-full flex justify-center">
+                  <GoogleLogin
+                    onSuccess={handleGoogleSuccess}
+                    onError={() => {
+                      toast({
+                        title: 'Google Login failed',
+                        description: 'Failed to authenticate with Google.',
+                        variant: 'destructive'
+                      });
+                    }}
+                    useOneTap
+                    theme="outline"
+                    shape="rectangular"
+                    width="100%"
+                  />
+                </div>
               </div>
             </div>
           </Card>
