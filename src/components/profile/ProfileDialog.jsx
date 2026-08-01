@@ -226,7 +226,44 @@ export function ProfileDialog({ open, onOpenChange, currentUser, onProfileUpdate
                         </div>
                     </div>
 
-                    <DialogFooter>
+                    <div className="pt-4 mt-6 border-t border-border">
+                        <h3 className="text-sm font-semibold text-destructive mb-2">Danger Zone</h3>
+                        <div className="flex justify-between items-center bg-destructive/10 p-3 rounded-lg border border-destructive/20">
+                            <div>
+                                <p className="text-sm font-medium text-destructive">Delete Account</p>
+                                <p className="text-xs text-destructive/80">Permanently remove your account and data.</p>
+                            </div>
+                            <Button 
+                                type="button" 
+                                variant="destructive" 
+                                size="sm" 
+                                onClick={async () => {
+                                    if (currentUser?.role === 'admin') {
+                                        toast.error("Admin accounts cannot be deleted.");
+                                        return;
+                                    }
+                                    if (!confirm("Are you sure you want to permanently delete your account? This action cannot be undone.")) return;
+                                    
+                                    try {
+                                        setSaving(true);
+                                        const { authAPI } = await import('@/lib/apiService');
+                                        await authAPI.deleteAccount();
+                                        localStorage.removeItem('token');
+                                        localStorage.removeItem('user');
+                                        window.location.href = '/';
+                                    } catch (error) {
+                                        console.error(error);
+                                        toast.error(error.response?.data?.error || "Failed to delete account");
+                                        setSaving(false);
+                                    }
+                                }}
+                            >
+                                Delete Account
+                            </Button>
+                        </div>
+                    </div>
+
+                    <DialogFooter className="mt-6">
                         <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
                             Cancel
                         </Button>

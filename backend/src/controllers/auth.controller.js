@@ -236,6 +236,35 @@ class AuthController {
             next(error);
         }
     }
+
+    /**
+     * Delete Account
+     */
+    async deleteAccount(req, res, next) {
+        try {
+            const user = await User.findById(req.user._id);
+            if (!user) {
+                return res.status(HTTP_STATUS.NOT_FOUND).json({
+                    error: 'User not found'
+                });
+            }
+
+            // Cannot delete admin account this way to prevent accidental locking out of the system
+            if (user.role === 'admin') {
+                return res.status(HTTP_STATUS.FORBIDDEN).json({
+                    error: 'Admin accounts cannot be deleted directly'
+                });
+            }
+
+            await User.findByIdAndDelete(req.user._id);
+
+            res.json({
+                message: 'Account deleted successfully'
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 export default new AuthController();

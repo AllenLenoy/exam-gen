@@ -7,7 +7,8 @@ export const authAPI = {
     login: (data) => api.post('/auth/login', data),
     googleLogin: (data) => api.post('/auth/google', data),
     getCurrentUser: () => api.get('/auth/me'),
-    logout: () => api.post('/auth/logout')
+    logout: () => api.post('/auth/logout'),
+    deleteAccount: () => api.delete('/auth/me')
 };
 
 // ==================== ADMIN ====================

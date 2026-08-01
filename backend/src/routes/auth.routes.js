@@ -27,6 +27,13 @@ router.post('/google', authController.googleLogin.bind(authController));
 router.get('/me', requireAuth, authController.getCurrentUser);
 
 /**
+ * DELETE /api/auth/me
+ * Delete current user account
+ * Requires authentication
+ */
+router.delete('/me', requireAuth, authController.deleteAccount);
+
+/**
  * PUT /api/auth/profile
  * Update user profile
  * Requires authentication

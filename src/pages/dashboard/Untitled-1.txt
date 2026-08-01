@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Exam Genie - Crafting Academic Excellence</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;600&amp;family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-tertiary": "#ffffff",
+                      "background": "#f9f9f8",
+                      "on-error-container": "#93000a",
+                      "on-tertiary-container": "#beb5b0",
+                      "tertiary-fixed": "#eae1da",
+                      "surface-tint": "#2e6a41",
+                      "on-surface": "#1a1c1c",
+                      "inverse-surface": "#2f3130",
+                      "surface-container-high": "#e8e8e7",
+                      "on-tertiary-fixed-variant": "#4b4641",
+                      "outline": "#717970",
+                      "on-secondary": "#ffffff",
+                      "secondary-container": "#fea619",
+                      "on-secondary-fixed": "#2a1700",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#cec5bf",
+                      "inverse-on-surface": "#f1f1f0",
+                      "outline-variant": "#c0c9be",
+                      "secondary": "#855300",
+                      "on-background": "#1a1c1c",
+                      "secondary-fixed": "#ffddb8",
+                      "tertiary": "#36312d",
+                      "on-tertiary-fixed": "#1f1b17",
+                      "on-secondary-fixed-variant": "#653e00",
+                      "on-primary-fixed": "#00210d",
+                      "surface-container-low": "#f3f4f3",
+                      "on-error": "#ffffff",
+                      "tertiary-container": "#4d4743",
+                      "surface-bright": "#f9f9f8",
+                      "primary": "#003b1b",
+                      "surface-container": "#eeeeed",
+                      "surface-dim": "#dadad9",
+                      "surface-container-highest": "#e2e2e2",
+                      "primary-container": "#14532d",
+                      "on-primary-container": "#87c695",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#12512c",
+                      "primary-fixed": "#b1f2be",
+                      "on-surface-variant": "#404941",
+                      "surface-variant": "#e2e2e2",
+                      "on-secondary-container": "#684000",
+                      "surface-container-lowest": "#ffffff",
+                      "secondary-fixed-dim": "#ffb95f",
+                      "primary-fixed-dim": "#96d5a3",
+                      "surface": "#f9f9f8",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#96d5a3"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "base": "8px",
+                      "margin-mobile": "16px",
+                      "container-max": "1280px",
+                      "margin-desktop": "48px"
+              },
+              "fontFamily": {
+                      "body-lg": [
+                              "Hanken Grotesk"
+                      ],
+                      "display-lg": [
+                              "\"Source Serif 4\""
+                      ],
+                      "headline-md": [
+                              "\"Source Serif 4\""
+                      ],
+                      "label-md": [
+                              "Hanken Grotesk"
+                      ],
+                      "headline-sm": [
+                              "\"Source Serif 4\""
+                      ],
+                      "headline-lg-mobile": [
+                              "\"Source Serif 4\""
+                      ],
+                      "headline-lg": [
+                              "\"Source Serif 4\""
+                      ],
+                      "body-md": [
+                              "Hanken Grotesk"
+                      ]
+              },
+              "fontSize": {
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        .ambient-shadow {
+            box-shadow: 0 4px 16px -2px rgba(20, 83, 45, 0.06);
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex flex-col font-body-md antialiased">
+<!-- TopNavBar -->
+<nav class="bg-background dark:bg-on-background fixed top-0 w-full border-b border-outline-variant dark:border-outline z-50">
+<div class="flex justify-between items-center px-margin-desktop h-20 max-w-container-max mx-auto">
+<a class="font-headline-md text-headline-md text-primary dark:text-primary-fixed tracking-tight" href="#">Exam Genie</a>
+<div class="hidden md:flex gap-gutter">
+<a class="font-body-md text-body-md text-primary dark:text-primary-fixed border-b-2 border-primary dark:border-primary-fixed pb-1 cursor-pointer transition-all duration-200" href="#">Features</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors cursor-pointer transition-all duration-200" href="#">Pricing</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-on-tertiary-container hover:text-primary dark:hover:text-primary-fixed transition-colors cursor-pointer transition-all duration-200" href="#">Resources</a>
+</div>
+<button class="font-label-md text-label-md bg-primary-container text-on-primary px-4 py-2 rounded-lg hover:bg-primary transition-colors">Sign In</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[100px] md:pt-[120px] pb-24 px-margin-mobile md:px-margin-desktop">
+<div class="max-w-container-max mx-auto grid grid-cols-1 lg:grid-cols-12 gap-gutter items-center">
+<!-- Left Column: Hero Copy -->
+<div class="lg:col-span-5 flex flex-col gap-6 md:gap-8 order-2 lg:order-1 mt-12 lg:mt-0">
+<div class="space-y-4">
+<span class="inline-block px-3 py-1 rounded bg-surface-container-low border border-outline-variant font-label-md text-label-md text-primary-container tracking-wider uppercase">AI-Powered Assessment</span>
+<h1 class="font-display-lg text-display-lg text-primary-container leading-tight">
+                        Crafting Academic Excellence with AI-Powered Exams.
+                    </h1>
+</div>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-lg">
+                    Empower educators to generate randomized, rigorous question banks and assessments in seconds. Shift your focus from drafting to teaching.
+                </p>
+<div class="flex flex-col sm:flex-row gap-4 pt-4">
+<button class="bg-secondary-container text-primary-container font-label-md text-label-md px-8 py-4 rounded-lg shadow-sm hover:opacity-90 transition-opacity text-center font-bold">
+                        Start Free Trial
+                    </button>
+<button class="bg-transparent border border-primary-container text-primary-container font-label-md text-label-md px-8 py-4 rounded-lg hover:bg-surface-container-low transition-colors text-center flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-[20px]">play_circle</span>
+                        See How It Works
+                    </button>
+</div>
+<div class="mt-8 flex items-center gap-4 text-on-surface-variant font-label-md text-label-md opacity-80">
+<div class="flex -space-x-2">
+<img class="w-8 h-8 rounded-full border-2 border-background object-cover" data-alt="A small circular portrait of an academic professional wearing glasses, looking confident in a library setting. Soft, natural lighting, modern academic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC2Q0gn1sMvp5rWPvLeU1sC0p_7JizAN7TNRwofKKKjbuwQTpPAjldr60FG6MfBGJ7Vl-4sZYzvPFl2fdHNT_A61IBc7mGZT7HEoxmY3ZEHEkDHndfH-lnr_bQ_9Z0sIf0-YwJVkz5knORSzd1Qntu5PIO3jG9oHlL7u7Bc3y6910Pcij_i5pFxxN-I0uI-ZSf5gjS7VYSLlfHPh6UqvV8C2KpnZFiyp4AmDr3JIzM16HxsmkV6pbFOmTg3QotFlSS4hmDEw_a3nw"/>
+<img class="w-8 h-8 rounded-full border-2 border-background object-cover" data-alt="A small circular portrait of a smiling female teacher in a brightly lit classroom, wearing a warm colored sweater. Modern academic aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCnUwjyR5Ut6hxS2Y0nkIU5OEhOQXcU0SzTPc57egBTMcEnO57rnJIgWhv2abTv_0SmbFwLuR5onkWvK1evdGnvelig0aMexySNLK0zUE8hfjvoyDi-2XTMhgHP25fsJHvkFPcl1bI730Svs6Qv0XopLa7K8TeGiqxoShC611JGlNAXCEwAHKz7SEzO1TvihN94XjpiKIUHdE9VTWaC7PrbbPAAVbV61FcCLia20WFMPweYEWeQE-novWBWDad1RDa17Olt0-C1gQ"/>
+<img class="w-8 h-8 rounded-full border-2 border-background object-cover" data-alt="A small circular portrait of a university professor in a tweed jacket, standing in front of a subtly blurred blackboard. Professional and scholarly." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgyQvt0xgmq1RxlgXyDCneM1OkOXAHh5e8UR4bD_1HMnEhdUxSOswJ7s9U64Wqa-5j1r9VZ80teKWnsKoAT70-nIIssADuzwnNdtWibMO9km69pxSPy8UD_mdsiiPb-bF4kU201VKR2m0qKnM_byrt97mkks-mJlAyottdcNm5p9xvJHthb0f0sIav6vz8hQnF-JzGLlAZqw3Fjn41JRgrwdbi3eDGEtvIKw2P_A2sjilEhkvV_7Dyw-nuArwBQa-sRWii1AqMLQ"/>
+</div>
+<span>Trusted by 10,000+ Educators</span>
+</div>
+</div>
+<!-- Right Column: Interactive Mockup -->
+<div class="lg:col-span-7 lg:col-start-6 order-1 lg:order-2">
+<div class="bg-surface-container-lowest rounded-xl border border-outline-variant ambient-shadow p-6 md:p-8 relative overflow-hidden">
+<!-- App Header -->
+<div class="flex justify-between items-center border-b border-outline-variant pb-4 mb-6">
+<div class="flex items-center gap-2 text-primary-container">
+<span class="material-symbols-outlined">school</span>
+<h2 class="font-headline-sm text-headline-sm">Exam Generator</h2>
+</div>
+<div class="flex gap-2">
+<div class="w-3 h-3 rounded-full bg-surface-dim"></div>
+<div class="w-3 h-3 rounded-full bg-surface-dim"></div>
+<div class="w-3 h-3 rounded-full bg-surface-dim"></div>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<!-- Form Controls -->
+<div class="space-y-6">
+<!-- Subject Selection -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Subject Area</label>
+<div class="relative">
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container appearance-none outline-none transition-colors">
+<option>Advanced Biology</option>
+<option>World History</option>
+<option>Calculus II</option>
+<option>Organic Chemistry</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none">expand_more</span>
+</div>
+</div>
+<!-- Topic Focus -->
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Specific Topic (Optional)</label>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface placeholder:text-on-tertiary-container focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors" placeholder="e.g. Cellular Respiration" type="text"/>
+</div>
+<!-- Question Count & Difficulty -->
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Questions</label>
+<div class="flex items-center gap-3">
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors" type="number" value="25"/>
+</div>
+</div>
+<div>
+<label class="block font-label-md text-label-md text-on-surface-variant mb-2">Difficulty</label>
+<select class="w-full bg-surface-container-low border border-outline-variant rounded-lg px-4 py-3 font-body-md text-body-md text-on-surface focus:border-primary-container focus:ring-1 focus:ring-primary-container outline-none transition-colors appearance-none">
+<option>Mixed</option>
+<option>Introductory</option>
+<option>Intermediate</option>
+<option>Advanced</option>
+</select>
+</div>
+</div>
+<button class="w-full bg-primary-container text-on-primary font-label-md text-label-md py-3 rounded-lg flex items-center justify-center gap-2 hover:bg-primary transition-colors mt-4">
+<span class="material-symbols-outlined" data-weight="fill">magic_button</span>
+                                Generate Draft
+                            </button>
+</div>
+<!-- Preview Area -->
+<div class="bg-background rounded-lg border border-outline-variant p-4 flex flex-col h-full">
+<div class="flex justify-between items-center mb-4">
+<span class="font-label-md text-label-md text-on-surface-variant">Live Preview</span>
+<span class="text-xs font-label-md bg-surface-container-high px-2 py-1 rounded text-on-surface-variant">Drafting...</span>
+</div>
+<div class="space-y-4 flex-grow">
+<!-- Skeleton Question 1 -->
+<div class="animate-pulse">
+<div class="flex gap-2 mb-2">
+<div class="w-6 h-6 rounded bg-surface-variant flex-shrink-0"></div>
+<div class="h-4 bg-surface-variant rounded w-full mt-1"></div>
+</div>
+<div class="h-4 bg-surface-variant rounded w-5/6 ml-8 mb-3"></div>
+<div class="ml-8 space-y-2">
+<div class="h-3 bg-surface-variant rounded w-2/3"></div>
+<div class="h-3 bg-surface-variant rounded w-3/4"></div>
+<div class="h-3 bg-surface-container-highest border border-surface-variant rounded w-1/2"></div>
+</div>
+</div>
+<hr class="border-outline-variant"/>
+<!-- Skeleton Question 2 -->
+<div class="animate-pulse opacity-50">
+<div class="flex gap-2 mb-2">
+<div class="w-6 h-6 rounded bg-surface-variant flex-shrink-0"></div>
+<div class="h-4 bg-surface-variant rounded w-full mt-1"></div>
+</div>
+<div class="h-4 bg-surface-variant rounded w-4/6 ml-8 mb-3"></div>
+<div class="ml-8 space-y-2">
+<div class="h-3 bg-surface-variant rounded w-1/2"></div>
+<div class="h-3 bg-surface-variant rounded w-2/3"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-surface-container dark:bg-surface-container-highest w-full py-12 border-t border-outline-variant dark:border-outline mt-auto">
+<div class="flex flex-col md:flex-row justify-between items-center px-margin-desktop gap-gutter max-w-container-max mx-auto">
+<div class="flex flex-col items-center md:items-start gap-2">
+<span class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed">Exam Genie</span>
+<span class="font-label-md text-label-md text-on-surface-variant dark:text-on-tertiary-container">© 2024 Exam Genie. All rights reserved.</span>
+</div>
+<div class="flex flex-wrap justify-center gap-6 mt-6 md:mt-0">
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-tertiary-container hover:underline decoration-secondary transition-opacity hover:opacity-80" href="#">Privacy Policy</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-tertiary-container hover:underline decoration-secondary transition-opacity hover:opacity-80" href="#">Terms of Service</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-tertiary-container hover:underline decoration-secondary transition-opacity hover:opacity-80" href="#">Contact Us</a>
+<a class="font-label-md text-label-md text-on-surface-variant dark:text-on-tertiary-container hover:underline decoration-secondary transition-opacity hover:opacity-80" href="#">Documentation</a>
+</div>
+</div>
+</footer>
+</body></html>
